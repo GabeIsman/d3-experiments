@@ -1,0 +1,53 @@
+File Manifest for ICPSR 34981
+
+United States Department of Justice. Office of Justice Programs. Bureau of
+Justice Statistics. National Prisoner Statistics, 1978-2012. ICPSR34981-v1.
+Ann Arbor, MI: Inter-university Consortium for Political and Social
+Research[distributor], 2014-04-23. http://doi.org/10.3886/ICPSR34981.v1
+
+
+Study-level Documentation
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34981-related_literature.txt        -       -         -       2015-04-01  -
+
+    34981-manifest.txt                  -       -         -       2015-04-02  -
+
+
+DS0001 National Prisoner Statistics, 1978-2012
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34981-0001-Codebook.pdf             -       -         -       2014-04-23  657e36ecb0f98952638926b66278b41e
+
+    34981-0001-Data.dta                 -       1,890     201     2014-04-23  5549252ea8ed20d34498209aeb38585e
+
+    34981-0001-Data.rda                 -       1,890     201     2014-04-23  3ce5221f23e73eea5c5acad0de39fc57
+
+    34981-0001-Data.sav                 -       1,890     201     2014-04-23  f58f64995025e4075215b9a4d1be78e1
+
+    34981-0001-Data.stc                 -       1,890     201     2014-04-23  3c0a4f29c647ccc9d1a13d75aef38634
+
+    34981-0001-Data.tsv                 -       1,890     201     2014-04-23  ce316316b4b19f7dba91b243c899620d
+
+    34981-0001-Data.txt                 825     1,890     201     2014-04-23  d8d329837ac5d5f07ae305c7420e50ed
+
+    34981-0001-Documentation-crosswalk.xlsx -       -         -       2014-04-23  6c0fb7909da71adede9c3332c27ccbb6
+
+    34981-0001-Documentation-notes.xlsx -       -         -       2014-04-23  b108c541ff1dbff285d231e59644c2d2
+
+    34981-0001-Setup.dct                -       -         -       2014-04-23  3640940402c13c690410b8f8164a4537
+
+    34981-0001-Setup.do                 -       -         -       2014-04-23  b44a8a5bc8967ceada094529744ecd1f
+
+    34981-0001-Setup.sas                -       -         -       2014-04-23  cf69c249cb2ced7464a7948e453bd197
+
+    34981-0001-Setup.sps                -       -         -       2014-04-23  b38e1cdb94a4e9ecc032caf9ba80c4db
+
+    34981-0001-Supplemental_syntax.do   -       -         -       2014-04-23  24176026026390b148dc9065e4717919
+
+    34981-0001-Supplemental_syntax.sas  -       -         -       2014-04-23  f9e02519db6369c860f3d8c506d13f37
+

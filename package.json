@@ -1,0 +1,14 @@
+{
+  "name": "justice-statistics",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "csv": "^0.4.1",
+    "gulp": "^3.8.11",
+    "gulp-rename": "^1.2.2",
+    "gulp-util": "^3.0.4",
+    "underscore": "^1.8.3"
+  }
+}

@@ -1,0 +1,117 @@
+Bibliography
+National Prisoner Statistics, 1978-2012
+
+This bibliography includes published and unpublished works that are related 
+to ICPSR study 34981. It includes works that are based on primary
+or secondary analysis of the data, or which describe or critique those
+data or the collection methodology. This list represents all items known
+to ICPSR as of 2015-04-02.
+
+If you publish a work or know of other works that are based on these data,
+please send the complete citation and name of the ICPSR study used to:
+bibliography@icpsr.umich.edu.
+
+
+1. Carson, E. Ann; Golinelli, Daniela, "Prisoners in 2012: Trends in
+Admissions and Releases, 1991-2012." NCJ 243920, Washington, DC: United
+States Department of Justice, Office of Justice Programs, Bureau of Justice
+Statistics, Dec 2013 (revised Sep 2014).
+Abstract: http://www.bjs.gov/index.cfm?ty=pbdetail&iid=4842
+Full text: http://www.bjs.gov/content/pub/ascii/p12tar9112.txt
+Full text PDF: http://www.bjs.gov/content/pub/pdf/p12tar9112.pdf
+Presents final counts on prisoners under the jurisdiction of state and
+federal correctional authorities on December 31, 2012, collected in the
+National Prisoner Statistics Program. The report expands on the statistics
+presented in the advance report in July 2013. It includes tables on the
+number of noncitizen inmates, inmates under age 18 in the custody of state
+or federal prisons, and prison capacity for each state and the Federal
+Bureau of Prisons. It also focuses on trends in prison admissions and
+releases from 1991 to 2011 and the offense and demographic characteristics
+of yearend prison populations. The report examines data from California
+state prisons between 2010 and 2012, one year prior and during the
+implementation of the state's Public Safety Realignment policy.
+
+2. Glaze, Lauren E.; Herberman, Erinn J., "Correctional Populations in the
+United States, 2012." Bulletin. NCJ 243936, Washington, DC: United States
+Department of Justice, Office of Justice Programs, Bureau of Justice
+Statistics, Dec 2013.
+Abstract: http://www.bjs.gov/index.cfm?ty=pbdetail&iid=4843
+Full text: http://www.bjs.gov/content/pub/ascii/cpus12.txt
+Full text PDF: http://www.bjs.gov/content/pub/pdf/cpus12.pdf
+Summarizes data from various correctional collections to provide statistics
+on the number of offenders supervised by the adult correctional systems in
+the United States. Adult correctional systems include offenders supervised
+in the community under the authority of probation or parole agencies and
+inmates held in state and federal prisons or local jails. The report
+examines the size and change in the total correctional population, the
+impact of changes in the community supervision and incarcerated populations
+during 2012, and the declining rate of offenders under correctional
+supervision over the past 5 years. The report also describes the impact of
+the California Public Safety Realignment Act of 2011 on changes in
+California's correctional populations and its broader impact on the U.S.
+correctional populations. Appendix tables provide additional information on
+other correctional populations, including prisoners under military
+jurisdiction, inmates held by correctional authorities in the U.S.
+territories and commonwealths, and jail inmates held in Indian country
+facilities.
+
+3. Maruschak, Laura M.; Berzofsky, Marcus
+, "Medical Problems of State and Federal Prisoners and Jail Inmates, 2011-
+12." Special Report. NCJ 248491, Washington, DC: United States Department
+of Justice, Office of Justice Programs, Bureau of Justice Statistics, Feb
+2015.
+Abstract: http://www.bjs.gov/index.cfm?ty=pbdetail&iid=5219&utm_source=juststats-020515&utm_medium=email&utm_content=Medical%20Problems%20of%20State%20and%20Federal%20Prisoners%20and%20Jail%20Inmates%202011%E2%80%9312&utm_campaign=juststats
+Full text: http://www.bjs.gov/content/pub/ascii/mpsfpji1112.txt
+Full text PDF: http://www.bjs.gov/content/pub/pdf/mpsfpji1112.pdf
+Presents the prevalence of medical problems among state and federal
+prisoners and jail inmates, highlighting differences in rates of chronic
+conditions and infectious diseases by demographic characteristic. The
+report describes health care services and treatment received by prisoners
+and jail inmates with health problems, including doctor 's visits, use of
+prescription medication, and other types of treatment. It also explains
+reasons why inmates with health problems were not receiving care and
+describes inmate satisfaction with health services received while
+incarcerated. Data were from the 2011-12 National Inmate Survey.
+
+4. Mitchell, Michael; Leachman, Michael, "Changing Priorities: State
+Criminal Justice Reforms and Investments in Education." Washington, DC:
+Center on Budget and Policy Priorities, Oct 28, 2014.
+Full text PDF: http://www.cbpp.org/files/10-28-14sfp.pdf
+
+5. Noonan, Margaret E.; Ginder, Scott, "Mortality in Local Jails and State
+Prisons, 2000-2012 - Statistical Tables." NCJ 247448, Washington, DC:
+United States Department of Justice, Office of Justice Programs, Bureau of
+Justice Statistics, Oct 2014.
+Abstract: http://www.bjs.gov/index.cfm?ty=pbdetail&iid=5115
+Full text: http://www.bjs.gov/content/pub/ascii/mljsp0012st.txt
+Full text PDF: http://www.bjs.gov/content/pub/pdf/mljsp0012st.pdf
+Presents national and state-level data on the number of inmate deaths that
+occurred in local jails and state prisons, the distribution of deaths
+across jails, and the aggregate count of deaths in federal prisons. The
+report presents annual counts and 13-year trends between 2000 and 2012 in
+deaths in custody. It provides mortality rates per 100,000 inmates in
+custody in jail or prison; details cause of death, including deaths
+attributed to illness, homicide, suicide, intoxication, and accidental
+injury; describes decedents' characteristics, including age, sex, race or
+Hispanic origin, legal status, and time served; and specifies the state
+where the deaths occurred. Data are from the Bureau of Justice Statistics'
+Deaths in Custody Reporting Program, initiated in 2000 under the Death in
+Custody Reporting Act of 2000 (P.L. 106-297).
+
+6. Shicker, Louis, "Overview of correctional medicine." Disease-a-Month.
+May 2014, 60, (5), 170 - 195. DOI: 10.1016/j.disamonth.2014.03.011
+Abstract: http://www.bjs.gov/index.cfm?ty=pbdetail&iid=5115
+Full text: http://www.bjs.gov/content/pub/ascii/mljsp0012st.txt
+Full text PDF: http://www.bjs.gov/content/pub/pdf/mljsp0012st.pdf
+Presents national and state-level data on the number of inmate deaths that
+occurred in local jails and state prisons, the distribution of deaths
+across jails, and the aggregate count of deaths in federal prisons. The
+report presents annual counts and 13-year trends between 2000 and 2012 in
+deaths in custody. It provides mortality rates per 100,000 inmates in
+custody in jail or prison; details cause of death, including deaths
+attributed to illness, homicide, suicide, intoxication, and accidental
+injury; describes decedents' characteristics, including age, sex, race or
+Hispanic origin, legal status, and time served; and specifies the state
+where the deaths occurred. Data are from the Bureau of Justice Statistics'
+Deaths in Custody Reporting Program, initiated in 2000 under the Death in
+Custody Reporting Act of 2000 (P.L. 106-297).
