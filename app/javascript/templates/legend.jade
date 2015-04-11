@@ -1,0 +1,8 @@
+.legend
+  table
+    each val in segments
+      tr.legend-control(type=val.label).active
+        td
+          .colorswatch(style="background-color: #{val.color}")
+        td
+          span.legend-label= val.label

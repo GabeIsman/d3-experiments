@@ -17,6 +17,8 @@ var Join = function(options) {
   }
   this.joinColumn = options.joinColumn;
   // The first file to pass through will be stored here.
+  this.file = null;
+  // This will accumulate the joined rows
   this.data = null;
 
   Transform.call(this, {objectMode: true});
@@ -33,6 +35,7 @@ Join.prototype._transform = function(file, encoding, done) {
 
   else if (file.isBuffer()) {
     if (!this.data) {
+      this.file = file;
       this.data = JSON.parse(file.contents);
       return done();
     }
@@ -87,10 +90,16 @@ Join.prototype._transform = function(file, encoding, done) {
       return row;
     }, this);
 
-    file.contents = new Buffer(JSON.stringify(joinedData));
-    this.push(file);
+    this.data = joinedData;
     return done();
   }
+};
+
+
+Join.prototype._flush = function(done) {
+  this.file.contents = new Buffer(JSON.stringify(this.data));
+  this.push(this.file);
+  return done();
 };
 
 

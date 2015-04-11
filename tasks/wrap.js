@@ -37,6 +37,7 @@ Wrap.prototype._flush = function(done) {
   return done();
 };
 
+
 Wrap.prototype.throwError_ = function(message) {
   this.emit('error', new gutil.PluginError({
     plugin: Wrap.NAME,

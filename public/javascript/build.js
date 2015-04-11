@@ -1,10 +1,669 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var _ = require('underscore');
-var d3 = require('d3');
+_ = require('underscore');
+d3 = require('d3');
 
-console.log('js loaded');
+// var TotalsMap = require('./views/totalsmap');
+// var map = new TotalsMap({
+//   el: '#map',
+//   url: '/data/totalsmap.json'
+// });
 
-},{"d3":2,"underscore":3}],2:[function(require,module,exports){
+var PrisonPops = require('./views/prisonpops');
+new PrisonPops({
+  el: '#small-multiples',
+  url: '/data/gq-races.json'
+})
+
+},{"./views/prisonpops":5,"d3":7,"underscore":10}],2:[function(require,module,exports){
+// This product includes color specifications and designs developed by Cynthia Brewer (http://colorbrewer.org/).
+var colorbrewer = {YlGn: {
+3: ["#f7fcb9","#addd8e","#31a354"],
+4: ["#ffffcc","#c2e699","#78c679","#238443"],
+5: ["#ffffcc","#c2e699","#78c679","#31a354","#006837"],
+6: ["#ffffcc","#d9f0a3","#addd8e","#78c679","#31a354","#006837"],
+7: ["#ffffcc","#d9f0a3","#addd8e","#78c679","#41ab5d","#238443","#005a32"],
+8: ["#ffffe5","#f7fcb9","#d9f0a3","#addd8e","#78c679","#41ab5d","#238443","#005a32"],
+9: ["#ffffe5","#f7fcb9","#d9f0a3","#addd8e","#78c679","#41ab5d","#238443","#006837","#004529"]
+},YlGnBu: {
+3: ["#edf8b1","#7fcdbb","#2c7fb8"],
+4: ["#ffffcc","#a1dab4","#41b6c4","#225ea8"],
+5: ["#ffffcc","#a1dab4","#41b6c4","#2c7fb8","#253494"],
+6: ["#ffffcc","#c7e9b4","#7fcdbb","#41b6c4","#2c7fb8","#253494"],
+7: ["#ffffcc","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#0c2c84"],
+8: ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#0c2c84"],
+9: ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"]
+},GnBu: {
+3: ["#e0f3db","#a8ddb5","#43a2ca"],
+4: ["#f0f9e8","#bae4bc","#7bccc4","#2b8cbe"],
+5: ["#f0f9e8","#bae4bc","#7bccc4","#43a2ca","#0868ac"],
+6: ["#f0f9e8","#ccebc5","#a8ddb5","#7bccc4","#43a2ca","#0868ac"],
+7: ["#f0f9e8","#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#08589e"],
+8: ["#f7fcf0","#e0f3db","#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#08589e"],
+9: ["#f7fcf0","#e0f3db","#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#0868ac","#084081"]
+},BuGn: {
+3: ["#e5f5f9","#99d8c9","#2ca25f"],
+4: ["#edf8fb","#b2e2e2","#66c2a4","#238b45"],
+5: ["#edf8fb","#b2e2e2","#66c2a4","#2ca25f","#006d2c"],
+6: ["#edf8fb","#ccece6","#99d8c9","#66c2a4","#2ca25f","#006d2c"],
+7: ["#edf8fb","#ccece6","#99d8c9","#66c2a4","#41ae76","#238b45","#005824"],
+8: ["#f7fcfd","#e5f5f9","#ccece6","#99d8c9","#66c2a4","#41ae76","#238b45","#005824"],
+9: ["#f7fcfd","#e5f5f9","#ccece6","#99d8c9","#66c2a4","#41ae76","#238b45","#006d2c","#00441b"]
+},PuBuGn: {
+3: ["#ece2f0","#a6bddb","#1c9099"],
+4: ["#f6eff7","#bdc9e1","#67a9cf","#02818a"],
+5: ["#f6eff7","#bdc9e1","#67a9cf","#1c9099","#016c59"],
+6: ["#f6eff7","#d0d1e6","#a6bddb","#67a9cf","#1c9099","#016c59"],
+7: ["#f6eff7","#d0d1e6","#a6bddb","#67a9cf","#3690c0","#02818a","#016450"],
+8: ["#fff7fb","#ece2f0","#d0d1e6","#a6bddb","#67a9cf","#3690c0","#02818a","#016450"],
+9: ["#fff7fb","#ece2f0","#d0d1e6","#a6bddb","#67a9cf","#3690c0","#02818a","#016c59","#014636"]
+},PuBu: {
+3: ["#ece7f2","#a6bddb","#2b8cbe"],
+4: ["#f1eef6","#bdc9e1","#74a9cf","#0570b0"],
+5: ["#f1eef6","#bdc9e1","#74a9cf","#2b8cbe","#045a8d"],
+6: ["#f1eef6","#d0d1e6","#a6bddb","#74a9cf","#2b8cbe","#045a8d"],
+7: ["#f1eef6","#d0d1e6","#a6bddb","#74a9cf","#3690c0","#0570b0","#034e7b"],
+8: ["#fff7fb","#ece7f2","#d0d1e6","#a6bddb","#74a9cf","#3690c0","#0570b0","#034e7b"],
+9: ["#fff7fb","#ece7f2","#d0d1e6","#a6bddb","#74a9cf","#3690c0","#0570b0","#045a8d","#023858"]
+},BuPu: {
+3: ["#e0ecf4","#9ebcda","#8856a7"],
+4: ["#edf8fb","#b3cde3","#8c96c6","#88419d"],
+5: ["#edf8fb","#b3cde3","#8c96c6","#8856a7","#810f7c"],
+6: ["#edf8fb","#bfd3e6","#9ebcda","#8c96c6","#8856a7","#810f7c"],
+7: ["#edf8fb","#bfd3e6","#9ebcda","#8c96c6","#8c6bb1","#88419d","#6e016b"],
+8: ["#f7fcfd","#e0ecf4","#bfd3e6","#9ebcda","#8c96c6","#8c6bb1","#88419d","#6e016b"],
+9: ["#f7fcfd","#e0ecf4","#bfd3e6","#9ebcda","#8c96c6","#8c6bb1","#88419d","#810f7c","#4d004b"]
+},RdPu: {
+3: ["#fde0dd","#fa9fb5","#c51b8a"],
+4: ["#feebe2","#fbb4b9","#f768a1","#ae017e"],
+5: ["#feebe2","#fbb4b9","#f768a1","#c51b8a","#7a0177"],
+6: ["#feebe2","#fcc5c0","#fa9fb5","#f768a1","#c51b8a","#7a0177"],
+7: ["#feebe2","#fcc5c0","#fa9fb5","#f768a1","#dd3497","#ae017e","#7a0177"],
+8: ["#fff7f3","#fde0dd","#fcc5c0","#fa9fb5","#f768a1","#dd3497","#ae017e","#7a0177"],
+9: ["#fff7f3","#fde0dd","#fcc5c0","#fa9fb5","#f768a1","#dd3497","#ae017e","#7a0177","#49006a"]
+},PuRd: {
+3: ["#e7e1ef","#c994c7","#dd1c77"],
+4: ["#f1eef6","#d7b5d8","#df65b0","#ce1256"],
+5: ["#f1eef6","#d7b5d8","#df65b0","#dd1c77","#980043"],
+6: ["#f1eef6","#d4b9da","#c994c7","#df65b0","#dd1c77","#980043"],
+7: ["#f1eef6","#d4b9da","#c994c7","#df65b0","#e7298a","#ce1256","#91003f"],
+8: ["#f7f4f9","#e7e1ef","#d4b9da","#c994c7","#df65b0","#e7298a","#ce1256","#91003f"],
+9: ["#f7f4f9","#e7e1ef","#d4b9da","#c994c7","#df65b0","#e7298a","#ce1256","#980043","#67001f"]
+},OrRd: {
+3: ["#fee8c8","#fdbb84","#e34a33"],
+4: ["#fef0d9","#fdcc8a","#fc8d59","#d7301f"],
+5: ["#fef0d9","#fdcc8a","#fc8d59","#e34a33","#b30000"],
+6: ["#fef0d9","#fdd49e","#fdbb84","#fc8d59","#e34a33","#b30000"],
+7: ["#fef0d9","#fdd49e","#fdbb84","#fc8d59","#ef6548","#d7301f","#990000"],
+8: ["#fff7ec","#fee8c8","#fdd49e","#fdbb84","#fc8d59","#ef6548","#d7301f","#990000"],
+9: ["#fff7ec","#fee8c8","#fdd49e","#fdbb84","#fc8d59","#ef6548","#d7301f","#b30000","#7f0000"]
+},YlOrRd: {
+3: ["#ffeda0","#feb24c","#f03b20"],
+4: ["#ffffb2","#fecc5c","#fd8d3c","#e31a1c"],
+5: ["#ffffb2","#fecc5c","#fd8d3c","#f03b20","#bd0026"],
+6: ["#ffffb2","#fed976","#feb24c","#fd8d3c","#f03b20","#bd0026"],
+7: ["#ffffb2","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#b10026"],
+8: ["#ffffcc","#ffeda0","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#b10026"],
+9: ["#ffffcc","#ffeda0","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#bd0026","#800026"]
+},YlOrBr: {
+3: ["#fff7bc","#fec44f","#d95f0e"],
+4: ["#ffffd4","#fed98e","#fe9929","#cc4c02"],
+5: ["#ffffd4","#fed98e","#fe9929","#d95f0e","#993404"],
+6: ["#ffffd4","#fee391","#fec44f","#fe9929","#d95f0e","#993404"],
+7: ["#ffffd4","#fee391","#fec44f","#fe9929","#ec7014","#cc4c02","#8c2d04"],
+8: ["#ffffe5","#fff7bc","#fee391","#fec44f","#fe9929","#ec7014","#cc4c02","#8c2d04"],
+9: ["#ffffe5","#fff7bc","#fee391","#fec44f","#fe9929","#ec7014","#cc4c02","#993404","#662506"]
+},Purples: {
+3: ["#efedf5","#bcbddc","#756bb1"],
+4: ["#f2f0f7","#cbc9e2","#9e9ac8","#6a51a3"],
+5: ["#f2f0f7","#cbc9e2","#9e9ac8","#756bb1","#54278f"],
+6: ["#f2f0f7","#dadaeb","#bcbddc","#9e9ac8","#756bb1","#54278f"],
+7: ["#f2f0f7","#dadaeb","#bcbddc","#9e9ac8","#807dba","#6a51a3","#4a1486"],
+8: ["#fcfbfd","#efedf5","#dadaeb","#bcbddc","#9e9ac8","#807dba","#6a51a3","#4a1486"],
+9: ["#fcfbfd","#efedf5","#dadaeb","#bcbddc","#9e9ac8","#807dba","#6a51a3","#54278f","#3f007d"]
+},Blues: {
+3: ["#deebf7","#9ecae1","#3182bd"],
+4: ["#eff3ff","#bdd7e7","#6baed6","#2171b5"],
+5: ["#eff3ff","#bdd7e7","#6baed6","#3182bd","#08519c"],
+6: ["#eff3ff","#c6dbef","#9ecae1","#6baed6","#3182bd","#08519c"],
+7: ["#eff3ff","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#084594"],
+8: ["#f7fbff","#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#084594"],
+9: ["#f7fbff","#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#08519c","#08306b"]
+},Greens: {
+3: ["#e5f5e0","#a1d99b","#31a354"],
+4: ["#edf8e9","#bae4b3","#74c476","#238b45"],
+5: ["#edf8e9","#bae4b3","#74c476","#31a354","#006d2c"],
+6: ["#edf8e9","#c7e9c0","#a1d99b","#74c476","#31a354","#006d2c"],
+7: ["#edf8e9","#c7e9c0","#a1d99b","#74c476","#41ab5d","#238b45","#005a32"],
+8: ["#f7fcf5","#e5f5e0","#c7e9c0","#a1d99b","#74c476","#41ab5d","#238b45","#005a32"],
+9: ["#f7fcf5","#e5f5e0","#c7e9c0","#a1d99b","#74c476","#41ab5d","#238b45","#006d2c","#00441b"]
+},Oranges: {
+3: ["#fee6ce","#fdae6b","#e6550d"],
+4: ["#feedde","#fdbe85","#fd8d3c","#d94701"],
+5: ["#feedde","#fdbe85","#fd8d3c","#e6550d","#a63603"],
+6: ["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#e6550d","#a63603"],
+7: ["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#8c2d04"],
+8: ["#fff5eb","#fee6ce","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#8c2d04"],
+9: ["#fff5eb","#fee6ce","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#a63603","#7f2704"]
+},Reds: {
+3: ["#fee0d2","#fc9272","#de2d26"],
+4: ["#fee5d9","#fcae91","#fb6a4a","#cb181d"],
+5: ["#fee5d9","#fcae91","#fb6a4a","#de2d26","#a50f15"],
+6: ["#fee5d9","#fcbba1","#fc9272","#fb6a4a","#de2d26","#a50f15"],
+7: ["#fee5d9","#fcbba1","#fc9272","#fb6a4a","#ef3b2c","#cb181d","#99000d"],
+8: ["#fff5f0","#fee0d2","#fcbba1","#fc9272","#fb6a4a","#ef3b2c","#cb181d","#99000d"],
+9: ["#fff5f0","#fee0d2","#fcbba1","#fc9272","#fb6a4a","#ef3b2c","#cb181d","#a50f15","#67000d"]
+},Greys: {
+3: ["#f0f0f0","#bdbdbd","#636363"],
+4: ["#f7f7f7","#cccccc","#969696","#525252"],
+5: ["#f7f7f7","#cccccc","#969696","#636363","#252525"],
+6: ["#f7f7f7","#d9d9d9","#bdbdbd","#969696","#636363","#252525"],
+7: ["#f7f7f7","#d9d9d9","#bdbdbd","#969696","#737373","#525252","#252525"],
+8: ["#ffffff","#f0f0f0","#d9d9d9","#bdbdbd","#969696","#737373","#525252","#252525"],
+9: ["#ffffff","#f0f0f0","#d9d9d9","#bdbdbd","#969696","#737373","#525252","#252525","#000000"]
+},PuOr: {
+3: ["#f1a340","#f7f7f7","#998ec3"],
+4: ["#e66101","#fdb863","#b2abd2","#5e3c99"],
+5: ["#e66101","#fdb863","#f7f7f7","#b2abd2","#5e3c99"],
+6: ["#b35806","#f1a340","#fee0b6","#d8daeb","#998ec3","#542788"],
+7: ["#b35806","#f1a340","#fee0b6","#f7f7f7","#d8daeb","#998ec3","#542788"],
+8: ["#b35806","#e08214","#fdb863","#fee0b6","#d8daeb","#b2abd2","#8073ac","#542788"],
+9: ["#b35806","#e08214","#fdb863","#fee0b6","#f7f7f7","#d8daeb","#b2abd2","#8073ac","#542788"],
+10: ["#7f3b08","#b35806","#e08214","#fdb863","#fee0b6","#d8daeb","#b2abd2","#8073ac","#542788","#2d004b"],
+11: ["#7f3b08","#b35806","#e08214","#fdb863","#fee0b6","#f7f7f7","#d8daeb","#b2abd2","#8073ac","#542788","#2d004b"]
+},BrBG: {
+3: ["#d8b365","#f5f5f5","#5ab4ac"],
+4: ["#a6611a","#dfc27d","#80cdc1","#018571"],
+5: ["#a6611a","#dfc27d","#f5f5f5","#80cdc1","#018571"],
+6: ["#8c510a","#d8b365","#f6e8c3","#c7eae5","#5ab4ac","#01665e"],
+7: ["#8c510a","#d8b365","#f6e8c3","#f5f5f5","#c7eae5","#5ab4ac","#01665e"],
+8: ["#8c510a","#bf812d","#dfc27d","#f6e8c3","#c7eae5","#80cdc1","#35978f","#01665e"],
+9: ["#8c510a","#bf812d","#dfc27d","#f6e8c3","#f5f5f5","#c7eae5","#80cdc1","#35978f","#01665e"],
+10: ["#543005","#8c510a","#bf812d","#dfc27d","#f6e8c3","#c7eae5","#80cdc1","#35978f","#01665e","#003c30"],
+11: ["#543005","#8c510a","#bf812d","#dfc27d","#f6e8c3","#f5f5f5","#c7eae5","#80cdc1","#35978f","#01665e","#003c30"]
+},PRGn: {
+3: ["#af8dc3","#f7f7f7","#7fbf7b"],
+4: ["#7b3294","#c2a5cf","#a6dba0","#008837"],
+5: ["#7b3294","#c2a5cf","#f7f7f7","#a6dba0","#008837"],
+6: ["#762a83","#af8dc3","#e7d4e8","#d9f0d3","#7fbf7b","#1b7837"],
+7: ["#762a83","#af8dc3","#e7d4e8","#f7f7f7","#d9f0d3","#7fbf7b","#1b7837"],
+8: ["#762a83","#9970ab","#c2a5cf","#e7d4e8","#d9f0d3","#a6dba0","#5aae61","#1b7837"],
+9: ["#762a83","#9970ab","#c2a5cf","#e7d4e8","#f7f7f7","#d9f0d3","#a6dba0","#5aae61","#1b7837"],
+10: ["#40004b","#762a83","#9970ab","#c2a5cf","#e7d4e8","#d9f0d3","#a6dba0","#5aae61","#1b7837","#00441b"],
+11: ["#40004b","#762a83","#9970ab","#c2a5cf","#e7d4e8","#f7f7f7","#d9f0d3","#a6dba0","#5aae61","#1b7837","#00441b"]
+},PiYG: {
+3: ["#e9a3c9","#f7f7f7","#a1d76a"],
+4: ["#d01c8b","#f1b6da","#b8e186","#4dac26"],
+5: ["#d01c8b","#f1b6da","#f7f7f7","#b8e186","#4dac26"],
+6: ["#c51b7d","#e9a3c9","#fde0ef","#e6f5d0","#a1d76a","#4d9221"],
+7: ["#c51b7d","#e9a3c9","#fde0ef","#f7f7f7","#e6f5d0","#a1d76a","#4d9221"],
+8: ["#c51b7d","#de77ae","#f1b6da","#fde0ef","#e6f5d0","#b8e186","#7fbc41","#4d9221"],
+9: ["#c51b7d","#de77ae","#f1b6da","#fde0ef","#f7f7f7","#e6f5d0","#b8e186","#7fbc41","#4d9221"],
+10: ["#8e0152","#c51b7d","#de77ae","#f1b6da","#fde0ef","#e6f5d0","#b8e186","#7fbc41","#4d9221","#276419"],
+11: ["#8e0152","#c51b7d","#de77ae","#f1b6da","#fde0ef","#f7f7f7","#e6f5d0","#b8e186","#7fbc41","#4d9221","#276419"]
+},RdBu: {
+3: ["#ef8a62","#f7f7f7","#67a9cf"],
+4: ["#ca0020","#f4a582","#92c5de","#0571b0"],
+5: ["#ca0020","#f4a582","#f7f7f7","#92c5de","#0571b0"],
+6: ["#b2182b","#ef8a62","#fddbc7","#d1e5f0","#67a9cf","#2166ac"],
+7: ["#b2182b","#ef8a62","#fddbc7","#f7f7f7","#d1e5f0","#67a9cf","#2166ac"],
+8: ["#b2182b","#d6604d","#f4a582","#fddbc7","#d1e5f0","#92c5de","#4393c3","#2166ac"],
+9: ["#b2182b","#d6604d","#f4a582","#fddbc7","#f7f7f7","#d1e5f0","#92c5de","#4393c3","#2166ac"],
+10: ["#67001f","#b2182b","#d6604d","#f4a582","#fddbc7","#d1e5f0","#92c5de","#4393c3","#2166ac","#053061"],
+11: ["#67001f","#b2182b","#d6604d","#f4a582","#fddbc7","#f7f7f7","#d1e5f0","#92c5de","#4393c3","#2166ac","#053061"]
+},RdGy: {
+3: ["#ef8a62","#ffffff","#999999"],
+4: ["#ca0020","#f4a582","#bababa","#404040"],
+5: ["#ca0020","#f4a582","#ffffff","#bababa","#404040"],
+6: ["#b2182b","#ef8a62","#fddbc7","#e0e0e0","#999999","#4d4d4d"],
+7: ["#b2182b","#ef8a62","#fddbc7","#ffffff","#e0e0e0","#999999","#4d4d4d"],
+8: ["#b2182b","#d6604d","#f4a582","#fddbc7","#e0e0e0","#bababa","#878787","#4d4d4d"],
+9: ["#b2182b","#d6604d","#f4a582","#fddbc7","#ffffff","#e0e0e0","#bababa","#878787","#4d4d4d"],
+10: ["#67001f","#b2182b","#d6604d","#f4a582","#fddbc7","#e0e0e0","#bababa","#878787","#4d4d4d","#1a1a1a"],
+11: ["#67001f","#b2182b","#d6604d","#f4a582","#fddbc7","#ffffff","#e0e0e0","#bababa","#878787","#4d4d4d","#1a1a1a"]
+},RdYlBu: {
+3: ["#fc8d59","#ffffbf","#91bfdb"],
+4: ["#d7191c","#fdae61","#abd9e9","#2c7bb6"],
+5: ["#d7191c","#fdae61","#ffffbf","#abd9e9","#2c7bb6"],
+6: ["#d73027","#fc8d59","#fee090","#e0f3f8","#91bfdb","#4575b4"],
+7: ["#d73027","#fc8d59","#fee090","#ffffbf","#e0f3f8","#91bfdb","#4575b4"],
+8: ["#d73027","#f46d43","#fdae61","#fee090","#e0f3f8","#abd9e9","#74add1","#4575b4"],
+9: ["#d73027","#f46d43","#fdae61","#fee090","#ffffbf","#e0f3f8","#abd9e9","#74add1","#4575b4"],
+10: ["#a50026","#d73027","#f46d43","#fdae61","#fee090","#e0f3f8","#abd9e9","#74add1","#4575b4","#313695"],
+11: ["#a50026","#d73027","#f46d43","#fdae61","#fee090","#ffffbf","#e0f3f8","#abd9e9","#74add1","#4575b4","#313695"]
+},Spectral: {
+3: ["#fc8d59","#ffffbf","#99d594"],
+4: ["#d7191c","#fdae61","#abdda4","#2b83ba"],
+5: ["#d7191c","#fdae61","#ffffbf","#abdda4","#2b83ba"],
+6: ["#d53e4f","#fc8d59","#fee08b","#e6f598","#99d594","#3288bd"],
+7: ["#d53e4f","#fc8d59","#fee08b","#ffffbf","#e6f598","#99d594","#3288bd"],
+8: ["#d53e4f","#f46d43","#fdae61","#fee08b","#e6f598","#abdda4","#66c2a5","#3288bd"],
+9: ["#d53e4f","#f46d43","#fdae61","#fee08b","#ffffbf","#e6f598","#abdda4","#66c2a5","#3288bd"],
+10: ["#9e0142","#d53e4f","#f46d43","#fdae61","#fee08b","#e6f598","#abdda4","#66c2a5","#3288bd","#5e4fa2"],
+11: ["#9e0142","#d53e4f","#f46d43","#fdae61","#fee08b","#ffffbf","#e6f598","#abdda4","#66c2a5","#3288bd","#5e4fa2"]
+},RdYlGn: {
+3: ["#fc8d59","#ffffbf","#91cf60"],
+4: ["#d7191c","#fdae61","#a6d96a","#1a9641"],
+5: ["#d7191c","#fdae61","#ffffbf","#a6d96a","#1a9641"],
+6: ["#d73027","#fc8d59","#fee08b","#d9ef8b","#91cf60","#1a9850"],
+7: ["#d73027","#fc8d59","#fee08b","#ffffbf","#d9ef8b","#91cf60","#1a9850"],
+8: ["#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850"],
+9: ["#d73027","#f46d43","#fdae61","#fee08b","#ffffbf","#d9ef8b","#a6d96a","#66bd63","#1a9850"],
+10: ["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"],
+11: ["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#ffffbf","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"]
+},Accent: {
+3: ["#7fc97f","#beaed4","#fdc086"],
+4: ["#7fc97f","#beaed4","#fdc086","#ffff99"],
+5: ["#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0"],
+6: ["#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0","#f0027f"],
+7: ["#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0","#f0027f","#bf5b17"],
+8: ["#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0","#f0027f","#bf5b17","#666666"]
+},Dark2: {
+3: ["#1b9e77","#d95f02","#7570b3"],
+4: ["#1b9e77","#d95f02","#7570b3","#e7298a"],
+5: ["#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e"],
+6: ["#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e","#e6ab02"],
+7: ["#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e","#e6ab02","#a6761d"],
+8: ["#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e","#e6ab02","#a6761d","#666666"]
+},Paired: {
+3: ["#a6cee3","#1f78b4","#b2df8a"],
+4: ["#a6cee3","#1f78b4","#b2df8a","#33a02c"],
+5: ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99"],
+6: ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c"],
+7: ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f"],
+8: ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00"],
+9: ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6"],
+10: ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a"],
+11: ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99"],
+12: ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928"]
+},Pastel1: {
+3: ["#fbb4ae","#b3cde3","#ccebc5"],
+4: ["#fbb4ae","#b3cde3","#ccebc5","#decbe4"],
+5: ["#fbb4ae","#b3cde3","#ccebc5","#decbe4","#fed9a6"],
+6: ["#fbb4ae","#b3cde3","#ccebc5","#decbe4","#fed9a6","#ffffcc"],
+7: ["#fbb4ae","#b3cde3","#ccebc5","#decbe4","#fed9a6","#ffffcc","#e5d8bd"],
+8: ["#fbb4ae","#b3cde3","#ccebc5","#decbe4","#fed9a6","#ffffcc","#e5d8bd","#fddaec"],
+9: ["#fbb4ae","#b3cde3","#ccebc5","#decbe4","#fed9a6","#ffffcc","#e5d8bd","#fddaec","#f2f2f2"]
+},Pastel2: {
+3: ["#b3e2cd","#fdcdac","#cbd5e8"],
+4: ["#b3e2cd","#fdcdac","#cbd5e8","#f4cae4"],
+5: ["#b3e2cd","#fdcdac","#cbd5e8","#f4cae4","#e6f5c9"],
+6: ["#b3e2cd","#fdcdac","#cbd5e8","#f4cae4","#e6f5c9","#fff2ae"],
+7: ["#b3e2cd","#fdcdac","#cbd5e8","#f4cae4","#e6f5c9","#fff2ae","#f1e2cc"],
+8: ["#b3e2cd","#fdcdac","#cbd5e8","#f4cae4","#e6f5c9","#fff2ae","#f1e2cc","#cccccc"]
+},Set1: {
+3: ["#e41a1c","#377eb8","#4daf4a"],
+4: ["#e41a1c","#377eb8","#4daf4a","#984ea3"],
+5: ["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00"],
+6: ["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00","#ffff33"],
+7: ["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00","#ffff33","#a65628"],
+8: ["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00","#ffff33","#a65628","#f781bf"],
+9: ["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00","#ffff33","#a65628","#f781bf","#999999"]
+},Set2: {
+3: ["#66c2a5","#fc8d62","#8da0cb"],
+4: ["#66c2a5","#fc8d62","#8da0cb","#e78ac3"],
+5: ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854"],
+6: ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f"],
+7: ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494"],
+8: ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"]
+},Set3: {
+3: ["#8dd3c7","#ffffb3","#bebada"],
+4: ["#8dd3c7","#ffffb3","#bebada","#fb8072"],
+5: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3"],
+6: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462"],
+7: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69"],
+8: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5"],
+9: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9"],
+10: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd"],
+11: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5"],
+12: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]
+}};
+
+module.exports = colorbrewer;
+
+},{}],3:[function(require,module,exports){
+
+// Map of name to character in stateface font.
+var states = {
+  'Alabama':              { statefaceChar: 'B', name: 'Alabama' },
+  'Alaska':               { statefaceChar: 'A', name: 'Alaska' },
+  'Arizona':              { statefaceChar: 'D', name: 'Arizona' },
+  'Arkansas':             { statefaceChar: 'C', name: 'Arkansas' },
+  'California':           { statefaceChar: 'E', name: 'California' },
+  'Colorado':             { statefaceChar: 'F', name: 'Colorado' },
+  'Connecticut':          { statefaceChar: 'G', name: 'Connecticut' },
+  'Delaware':             { statefaceChar: 'H', name: 'Delaware' },
+  'District of Columbia': { statefaceChar: 'y', name: 'District of Columbia' },
+  'Florida':              { statefaceChar: 'I', name: 'Florida' },
+  'Georgia':              { statefaceChar: 'J', name: 'Georgia' },
+  'Hawaii':               { statefaceChar: 'K', name: 'Hawaii' },
+  'Idaho':                { statefaceChar: 'M', name: 'Idaho' },
+  'Illinois':             { statefaceChar: 'N', name: 'Illinois' },
+  'Indiana':              { statefaceChar: 'O', name: 'Indiana' },
+  'Iowa':                 { statefaceChar: 'L', name: 'Iowa' },
+  'Kansas':               { statefaceChar: 'P', name: 'Kansas' },
+  'Kentucky':             { statefaceChar: 'Q', name: 'Kentucky' },
+  'Louisiana':             { statefaceChar: 'R', name: 'Louisana' },
+  'Maine':                { statefaceChar: 'U', name: 'Maine' },
+  'Maryland':             { statefaceChar: 'T', name: 'Maryland' },
+  'Massachusetts':        { statefaceChar: 'S', name: 'Massachusetts' },
+  'Michigan':             { statefaceChar: 'V', name: 'Michigan' },
+  'Minnesota':            { statefaceChar: 'W', name: 'Minnesota' },
+  'Mississippi':          { statefaceChar: 'Y', name: 'Mississippi' },
+  'Missouri':             { statefaceChar: 'X', name: 'Missouri' },
+  'Montana':              { statefaceChar: 'Z', name: 'Montana' },
+  'Nebraska':             { statefaceChar: 'c', name: 'Nebraska' },
+  'Nevada':               { statefaceChar: 'g', name: 'Nevada' },
+  'New Hampshire':        { statefaceChar: 'd', name: 'New Hampshire' },
+  'New Jersey':           { statefaceChar: 'e', name: 'New Jersey' },
+  'New Mexico':           { statefaceChar: 'f', name: 'New Mexico' },
+  'New York':             { statefaceChar: 'h', name: 'New York' },
+  'North Carolina':       { statefaceChar: 'a', name: 'North Carolina' },
+  'North Dakota':         { statefaceChar: 'b', name: 'North Dakota' },
+  'Ohio':                 { statefaceChar: 'i', name: 'Ohio' },
+  'Oklahoma':             { statefaceChar: 'j', name: 'Oklahoma' },
+  'Oregon':               { statefaceChar: 'k', name: 'Oregon' },
+  'Pennsylvania':         { statefaceChar: 'l', name: 'Pennsylvania' },
+  'Puerto Rico':          { statefaceChar: '3', name: 'Puerto Rico' },
+  'Rhode Island':         { statefaceChar: 'm', name: 'Rhode Island' },
+  'South Carolina':       { statefaceChar: 'n', name: 'South Carolina' },
+  'South Dakota':         { statefaceChar: 'o', name: 'South Dakota' },
+  'Tennessee':            { statefaceChar: 'p', name: 'Tennessee' },
+  'Texas':                { statefaceChar: 'q', name: 'Texas' },
+  'United States':        { statefaceChar: 'z', name: 'United States' },
+  'Utah':                 { statefaceChar: 'r', name: 'Utah' },
+  'Vermont':              { statefaceChar: 't', name: 'Vermont' },
+  'Virginia':             { statefaceChar: 's', name: 'Virginia' },
+  'Washington':           { statefaceChar: 'u', name: 'Washington' },
+  'West Virginia':        { statefaceChar: 'w', name: 'West Virginia' },
+  'Wisconsin':            { statefaceChar: 'v', name: 'Wisconsin' },
+  'Wyoming':              { statefaceChar: 'x', name: 'Wyoming' },
+}
+
+var getStateChar = function(stateName) {
+  var state = states[stateName];
+  if (!state) {
+    console.log(stateName, 'not found in stateface');
+    return stateName;
+  }
+
+  return state.statefaceChar;
+}
+
+module.exports = getStateChar;
+
+},{}],4:[function(require,module,exports){
+var jade = require("jade/runtime");
+
+module.exports = function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var jade_interp;
+;var locals_for_with = (locals || {});(function (segments, undefined) {
+buf.push("<div class=\"legend\"><table>");
+// iterate segments
+;(function(){
+  var $$obj = segments;
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.attr("type", val.label, true, false)) + " class=\"legend-control active\"><td><div" + (jade.attr("style", "background-color: " + (val.color) + "", true, false)) + " class=\"colorswatch\"></div></td><td><span class=\"legend-label\">" + (jade.escape(null == (jade_interp = val.label) ? "" : jade_interp)) + "</span></td></tr>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.attr("type", val.label, true, false)) + " class=\"legend-control active\"><td><div" + (jade.attr("style", "background-color: " + (val.color) + "", true, false)) + " class=\"colorswatch\"></div></td><td><span class=\"legend-label\">" + (jade.escape(null == (jade_interp = val.label) ? "" : jade_interp)) + "</span></td></tr>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</table></div>");}.call(this,"segments" in locals_for_with?locals_for_with.segments:typeof segments!=="undefined"?segments:undefined,"undefined" in locals_for_with?locals_for_with.undefined:typeof undefined!=="undefined"?undefined:undefined));;return buf.join("");
+};
+},{"jade/runtime":8}],5:[function(require,module,exports){
+var topojson       = require('topojson');
+var colorbrewer    = require('../lib/colors/colorbrewer');
+var legendTemplate = require('../templates/legend.jade');
+var stateface      = require('../lib/stateface');
+
+var RACES          = ['white', 'asian', 'multiracial', 'native', 'hispanic', 'black', 'islander'];
+var COLORSCHEME    = colorbrewer.Greys[6];
+
+// Some semblance of a geography-based ordering of FIPS codes
+var NATURAL_STATE_ORDERING = [2, 30, 38, 27, 55, 26, 39, 36, 50, 23, 53, 16, 46, 31, 19, 17, 42, 34, 25, 33, 41, 32, 56, 20, 29, 18, 54, 10, 44, 9, 6, 49, 8, 40, 5, 21, 51, 24, 11, 37, 15, 4, 35, 48, 22, 47, 28, 1, 13, 45, 12];
+
+/**
+ * @param {Object} options Hash should contain a selector that picks out an
+ *     element that the map should be rendered into.
+ */
+var PrisonPops = function(options) {
+  if (!options || !options.el) {
+    throw new Error('Must pass a selector when initializing a PrisonPops.');
+  }
+  this.el = d3.select(options.el);
+
+  if (!options.url) {
+    throw new Error('Must pass a url when initializing a PrisonPops');
+  }
+  d3.json(options.url, _.bind(this.handleFetch, this));
+
+  d3.select(window).on('resize', _.bind(this.handleResize, this));
+  this.handleResize();
+
+  this.colorscale = d3.scale.category20();
+    // .domain(RACES)
+    // .range(COLORSCHEME);
+
+
+  this.active = d3.select(null);
+};
+
+
+/**
+ * Updates the size and path to reflect the new size. If the data is loaded, re-
+ * renders the data.
+ */
+PrisonPops.prototype.handleResize = function() {
+  var boundingRect = this.el.node().getBoundingClientRect();
+  this.width       = boundingRect.width;
+  this.height      = boundingRect.height;
+  this.radius      = Math.min(this.width / 20, this.height / 10);
+  this.arc         = d3.svg.arc()
+    .outerRadius(this.radius * 0.78)
+    .innerRadius(0);
+
+  this.tileWidth  = (this.width - 2*this.radius) / 10  ;
+  this.tileHeight = this.height / 6;
+
+  // If we've loaded the data, then re-render the data.
+  if (this.data) {
+    this.renderData();
+  }
+};
+
+
+/**
+ * Handles the response the data fetch.
+ *
+ * @param  {Object} err
+ * @param  {Object} data
+ */
+PrisonPops.prototype.handleFetch = function(err, data) {
+  // If something bad happened abort and hide the widget.
+  if (err) {
+    console.log(err);
+    this.el.style.display = 'none';
+    return;
+  }
+
+  this.data = data;
+  this.renderData();
+};
+
+
+/**
+ * Renders the data. TODO: seperate out the rendering of everything non-data
+ * dependent.
+ */
+PrisonPops.prototype.renderData = function() {
+  var self = this;
+
+  // Kill the loading text, or whatever was previously in the element we were
+  // passed.
+  this.el.html("");
+
+  // Add the containing svg.
+  this.svg = this.el.append("svg")
+    .attr("width", this.width)
+    .attr("height", this.height)
+    .attr("class", "prisonpops-us")
+    .append("g");
+      // .attr("transform", "translate(" + [this.width / 2, this.height / 2] + ")" );
+
+  var data = this.formatData(this.data);
+
+  this.pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.population; });
+
+  // Store the computed layout to avoid recomputing on rotation.
+  _.each(data, function(value) {
+    value.pie = self.pie(value.data);
+  });
+
+  var multiples = this.svg.selectAll('.small-multiple')
+    .data(data)
+    .enter().append('g')
+    .attr('width', this.tileWidth)
+    .attr('height', this.tileHeight)
+    .classed('small-multiple', true)
+    .attr('transform', function(d, i) {
+      return 'translate(' + self.getGroupTranslation(d, i) + ')';
+    });
+
+  var rotators = multiples
+    .append('g')
+    .classed('rotational-frame', true);
+
+  rotators.selectAll('.arc')
+    .data(function(d) { return d.pie; })
+    .enter().append('g')
+    .classed('arc', true)
+    .append('path')
+      .attr('d', this.arc)
+      .attr('class', function(d) { return 'wedge ' + d.data.type; })
+      .style("fill", function(d) { return self.colorscale(d.data.type); })
+      .attr('stroke', '#fff')
+      .on('mouseover', function(d, i) {
+        d3.selectAll('.' + d.data.type)
+          .transition()
+          .duration(300)
+          .attr('transform', 'scale(1.2)');
+      })
+      .on('mouseout', function(d, i) {
+        d3.selectAll('.' + d.data.type)
+          .transition()
+          .duration(300)
+          .attr('transform', '');
+      })
+      .on('click', function(d, i, j) {
+        var selectedType = d.data.type;
+        d3.selectAll('.rotational-frame')
+          .transition()
+          .duration(500)
+          .attr('transform', function(d, i) {
+            var selectedArc = _.find(d.pie, function(arc) {
+              return arc.data.type == selectedType;
+            });
+
+            var currentRotation   = d.currentRotation || 0; // Radians
+            var currentStartAngle = currentRotation + selectedArc.startAngle;
+            d.currentRotation     = currentRotation - currentStartAngle;
+            var rotationDegrees   = 360 * d.currentRotation / (Math.PI * 2);
+
+            return 'rotate(' + rotationDegrees + ')';
+          })
+      });
+
+  multiples.append('text')
+      // .attr('transform', 'translate(' + [this.tileWidth / 2, this.tileHeight] + ')')
+      .attr("dy", ".35em")
+      .classed("state-icon", true)
+      .text(function(d) { return stateface(d.name); });
+
+  multiples.append('text')
+    .classed('multiple-label', true)
+    .text(function(d) { return d.name; })
+    .attr('transform', 'translate(' + [0, this.tileHeight / 2] + ')');
+
+  this.renderLegend();
+};
+
+PrisonPops.prototype.getGroupTranslation = function(data, index) {
+  var index = NATURAL_STATE_ORDERING.indexOf(data.geoid);
+  if (index == -1) {
+    console.log(data, 'not found in ordering!');
+  }
+
+  var row    = Math.floor(index / 10);
+  var column = Math.floor(index % 10);
+  if (index === 50) {
+    row = 4;
+    column = 10;
+  }
+  var hpadding = this.radius;
+  var vpadding = 60 + this.radius;
+
+  return [hpadding + column * this.tileWidth, vpadding + row * this.tileHeight];
+};
+
+
+/**
+ * Constructs the legend and appends it.
+ */
+PrisonPops.prototype.renderLegend = function() {
+  var segments = _.map(RACES, function(type) {
+    return {
+      color: this.colorscale(type),
+      label: type
+    }
+  }, this);
+
+  this.el.append("div").html(legendTemplate({ segments: segments }));
+};
+
+
+PrisonPops.prototype.handleLegendClick = function(target, d) {
+
+};
+
+PrisonPops.prototype.formatData = function(data) {
+  return _.map(data, function(state) {
+    return {
+      geoid: state.geoid,
+      name: state.name,
+      data: _.map(RACES, function(race) {
+        return {
+          type: race,
+          population: state[race + '-all-prisons']
+        };
+      }),
+    };
+  });
+};
+
+module.exports = PrisonPops;
+
+
+
+
+},{"../lib/colors/colorbrewer":2,"../lib/stateface":3,"../templates/legend.jade":4,"topojson":9}],6:[function(require,module,exports){
+
+},{}],7:[function(require,module,exports){
 !function() {
   var d3 = {
     version: "3.5.5"
@@ -9509,7 +10168,784 @@ console.log('js loaded');
   if (typeof define === "function" && define.amd) define(d3); else if (typeof module === "object" && module.exports) module.exports = d3;
   this.d3 = d3;
 }();
-},{}],3:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+(function (global){
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.jade=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+/**
+ * Merge two attribute objects giving precedence
+ * to values in object `b`. Classes are special-cased
+ * allowing for arrays and merging/joining appropriately
+ * resulting in a string.
+ *
+ * @param {Object} a
+ * @param {Object} b
+ * @return {Object} a
+ * @api private
+ */
+
+exports.merge = function merge(a, b) {
+  if (arguments.length === 1) {
+    var attrs = a[0];
+    for (var i = 1; i < a.length; i++) {
+      attrs = merge(attrs, a[i]);
+    }
+    return attrs;
+  }
+  var ac = a['class'];
+  var bc = b['class'];
+
+  if (ac || bc) {
+    ac = ac || [];
+    bc = bc || [];
+    if (!Array.isArray(ac)) ac = [ac];
+    if (!Array.isArray(bc)) bc = [bc];
+    a['class'] = ac.concat(bc).filter(nulls);
+  }
+
+  for (var key in b) {
+    if (key != 'class') {
+      a[key] = b[key];
+    }
+  }
+
+  return a;
+};
+
+/**
+ * Filter null `val`s.
+ *
+ * @param {*} val
+ * @return {Boolean}
+ * @api private
+ */
+
+function nulls(val) {
+  return val != null && val !== '';
+}
+
+/**
+ * join array as classes.
+ *
+ * @param {*} val
+ * @return {String}
+ */
+exports.joinClasses = joinClasses;
+function joinClasses(val) {
+  return (Array.isArray(val) ? val.map(joinClasses) :
+    (val && typeof val === 'object') ? Object.keys(val).filter(function (key) { return val[key]; }) :
+    [val]).filter(nulls).join(' ');
+}
+
+/**
+ * Render the given classes.
+ *
+ * @param {Array} classes
+ * @param {Array.<Boolean>} escaped
+ * @return {String}
+ */
+exports.cls = function cls(classes, escaped) {
+  var buf = [];
+  for (var i = 0; i < classes.length; i++) {
+    if (escaped && escaped[i]) {
+      buf.push(exports.escape(joinClasses([classes[i]])));
+    } else {
+      buf.push(joinClasses(classes[i]));
+    }
+  }
+  var text = joinClasses(buf);
+  if (text.length) {
+    return ' class="' + text + '"';
+  } else {
+    return '';
+  }
+};
+
+
+exports.style = function (val) {
+  if (val && typeof val === 'object') {
+    return Object.keys(val).map(function (style) {
+      return style + ':' + val[style];
+    }).join(';');
+  } else {
+    return val;
+  }
+};
+/**
+ * Render the given attribute.
+ *
+ * @param {String} key
+ * @param {String} val
+ * @param {Boolean} escaped
+ * @param {Boolean} terse
+ * @return {String}
+ */
+exports.attr = function attr(key, val, escaped, terse) {
+  if (key === 'style') {
+    val = exports.style(val);
+  }
+  if ('boolean' == typeof val || null == val) {
+    if (val) {
+      return ' ' + (terse ? key : key + '="' + key + '"');
+    } else {
+      return '';
+    }
+  } else if (0 == key.indexOf('data') && 'string' != typeof val) {
+    if (JSON.stringify(val).indexOf('&') !== -1) {
+      console.warn('Since Jade 2.0.0, ampersands (`&`) in data attributes ' +
+                   'will be escaped to `&amp;`');
+    };
+    if (val && typeof val.toISOString === 'function') {
+      console.warn('Jade will eliminate the double quotes around dates in ' +
+                   'ISO form after 2.0.0');
+    }
+    return ' ' + key + "='" + JSON.stringify(val).replace(/'/g, '&apos;') + "'";
+  } else if (escaped) {
+    if (val && typeof val.toISOString === 'function') {
+      console.warn('Jade will stringify dates in ISO form after 2.0.0');
+    }
+    return ' ' + key + '="' + exports.escape(val) + '"';
+  } else {
+    if (val && typeof val.toISOString === 'function') {
+      console.warn('Jade will stringify dates in ISO form after 2.0.0');
+    }
+    return ' ' + key + '="' + val + '"';
+  }
+};
+
+/**
+ * Render the given attributes object.
+ *
+ * @param {Object} obj
+ * @param {Object} escaped
+ * @return {String}
+ */
+exports.attrs = function attrs(obj, terse){
+  var buf = [];
+
+  var keys = Object.keys(obj);
+
+  if (keys.length) {
+    for (var i = 0; i < keys.length; ++i) {
+      var key = keys[i]
+        , val = obj[key];
+
+      if ('class' == key) {
+        if (val = joinClasses(val)) {
+          buf.push(' ' + key + '="' + val + '"');
+        }
+      } else {
+        buf.push(exports.attr(key, val, false, terse));
+      }
+    }
+  }
+
+  return buf.join('');
+};
+
+/**
+ * Escape the given string of `html`.
+ *
+ * @param {String} html
+ * @return {String}
+ * @api private
+ */
+
+exports.escape = function escape(html){
+  var result = String(html)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  if (result === '' + html) return html;
+  else return result;
+};
+
+/**
+ * Re-throw the given `err` in context to the
+ * the jade in `filename` at the given `lineno`.
+ *
+ * @param {Error} err
+ * @param {String} filename
+ * @param {String} lineno
+ * @api private
+ */
+
+exports.rethrow = function rethrow(err, filename, lineno, str){
+  if (!(err instanceof Error)) throw err;
+  if ((typeof window != 'undefined' || !filename) && !str) {
+    err.message += ' on line ' + lineno;
+    throw err;
+  }
+  try {
+    str = str || require('fs').readFileSync(filename, 'utf8')
+  } catch (ex) {
+    rethrow(err, null, lineno)
+  }
+  var context = 3
+    , lines = str.split('\n')
+    , start = Math.max(lineno - context, 0)
+    , end = Math.min(lines.length, lineno + context);
+
+  // Error context
+  var context = lines.slice(start, end).map(function(line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? '  > ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'Jade') + ':' + lineno
+    + '\n' + context + '\n\n' + err.message;
+  throw err;
+};
+
+},{"fs":2}],2:[function(require,module,exports){
+
+},{}]},{},[1])(1)
+});
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"fs":6}],9:[function(require,module,exports){
+!function() {
+  var topojson = {
+    version: "1.6.18",
+    mesh: function(topology) { return object(topology, meshArcs.apply(this, arguments)); },
+    meshArcs: meshArcs,
+    merge: function(topology) { return object(topology, mergeArcs.apply(this, arguments)); },
+    mergeArcs: mergeArcs,
+    feature: featureOrCollection,
+    neighbors: neighbors,
+    presimplify: presimplify
+  };
+
+  function stitchArcs(topology, arcs) {
+    var stitchedArcs = {},
+        fragmentByStart = {},
+        fragmentByEnd = {},
+        fragments = [],
+        emptyIndex = -1;
+
+    // Stitch empty arcs first, since they may be subsumed by other arcs.
+    arcs.forEach(function(i, j) {
+      var arc = topology.arcs[i < 0 ? ~i : i], t;
+      if (arc.length < 3 && !arc[1][0] && !arc[1][1]) {
+        t = arcs[++emptyIndex], arcs[emptyIndex] = i, arcs[j] = t;
+      }
+    });
+
+    arcs.forEach(function(i) {
+      var e = ends(i),
+          start = e[0],
+          end = e[1],
+          f, g;
+
+      if (f = fragmentByEnd[start]) {
+        delete fragmentByEnd[f.end];
+        f.push(i);
+        f.end = end;
+        if (g = fragmentByStart[end]) {
+          delete fragmentByStart[g.start];
+          var fg = g === f ? f : f.concat(g);
+          fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
+        } else {
+          fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+        }
+      } else if (f = fragmentByStart[end]) {
+        delete fragmentByStart[f.start];
+        f.unshift(i);
+        f.start = start;
+        if (g = fragmentByEnd[start]) {
+          delete fragmentByEnd[g.end];
+          var gf = g === f ? f : g.concat(f);
+          fragmentByStart[gf.start = g.start] = fragmentByEnd[gf.end = f.end] = gf;
+        } else {
+          fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+        }
+      } else {
+        f = [i];
+        fragmentByStart[f.start = start] = fragmentByEnd[f.end = end] = f;
+      }
+    });
+
+    function ends(i) {
+      var arc = topology.arcs[i < 0 ? ~i : i], p0 = arc[0], p1;
+      if (topology.transform) p1 = [0, 0], arc.forEach(function(dp) { p1[0] += dp[0], p1[1] += dp[1]; });
+      else p1 = arc[arc.length - 1];
+      return i < 0 ? [p1, p0] : [p0, p1];
+    }
+
+    function flush(fragmentByEnd, fragmentByStart) {
+      for (var k in fragmentByEnd) {
+        var f = fragmentByEnd[k];
+        delete fragmentByStart[f.start];
+        delete f.start;
+        delete f.end;
+        f.forEach(function(i) { stitchedArcs[i < 0 ? ~i : i] = 1; });
+        fragments.push(f);
+      }
+    }
+
+    flush(fragmentByEnd, fragmentByStart);
+    flush(fragmentByStart, fragmentByEnd);
+    arcs.forEach(function(i) { if (!stitchedArcs[i < 0 ? ~i : i]) fragments.push([i]); });
+
+    return fragments;
+  }
+
+  function meshArcs(topology, o, filter) {
+    var arcs = [];
+
+    if (arguments.length > 1) {
+      var geomsByArc = [],
+          geom;
+
+      function arc(i) {
+        var j = i < 0 ? ~i : i;
+        (geomsByArc[j] || (geomsByArc[j] = [])).push({i: i, g: geom});
+      }
+
+      function line(arcs) {
+        arcs.forEach(arc);
+      }
+
+      function polygon(arcs) {
+        arcs.forEach(line);
+      }
+
+      function geometry(o) {
+        if (o.type === "GeometryCollection") o.geometries.forEach(geometry);
+        else if (o.type in geometryType) geom = o, geometryType[o.type](o.arcs);
+      }
+
+      var geometryType = {
+        LineString: line,
+        MultiLineString: polygon,
+        Polygon: polygon,
+        MultiPolygon: function(arcs) { arcs.forEach(polygon); }
+      };
+
+      geometry(o);
+
+      geomsByArc.forEach(arguments.length < 3
+          ? function(geoms) { arcs.push(geoms[0].i); }
+          : function(geoms) { if (filter(geoms[0].g, geoms[geoms.length - 1].g)) arcs.push(geoms[0].i); });
+    } else {
+      for (var i = 0, n = topology.arcs.length; i < n; ++i) arcs.push(i);
+    }
+
+    return {type: "MultiLineString", arcs: stitchArcs(topology, arcs)};
+  }
+
+  function mergeArcs(topology, objects) {
+    var polygonsByArc = {},
+        polygons = [],
+        components = [];
+
+    objects.forEach(function(o) {
+      if (o.type === "Polygon") register(o.arcs);
+      else if (o.type === "MultiPolygon") o.arcs.forEach(register);
+    });
+
+    function register(polygon) {
+      polygon.forEach(function(ring) {
+        ring.forEach(function(arc) {
+          (polygonsByArc[arc = arc < 0 ? ~arc : arc] || (polygonsByArc[arc] = [])).push(polygon);
+        });
+      });
+      polygons.push(polygon);
+    }
+
+    function exterior(ring) {
+      return cartesianRingArea(object(topology, {type: "Polygon", arcs: [ring]}).coordinates[0]) > 0; // TODO allow spherical?
+    }
+
+    polygons.forEach(function(polygon) {
+      if (!polygon._) {
+        var component = [],
+            neighbors = [polygon];
+        polygon._ = 1;
+        components.push(component);
+        while (polygon = neighbors.pop()) {
+          component.push(polygon);
+          polygon.forEach(function(ring) {
+            ring.forEach(function(arc) {
+              polygonsByArc[arc < 0 ? ~arc : arc].forEach(function(polygon) {
+                if (!polygon._) {
+                  polygon._ = 1;
+                  neighbors.push(polygon);
+                }
+              });
+            });
+          });
+        }
+      }
+    });
+
+    polygons.forEach(function(polygon) {
+      delete polygon._;
+    });
+
+    return {
+      type: "MultiPolygon",
+      arcs: components.map(function(polygons) {
+        var arcs = [];
+
+        // Extract the exterior (unique) arcs.
+        polygons.forEach(function(polygon) {
+          polygon.forEach(function(ring) {
+            ring.forEach(function(arc) {
+              if (polygonsByArc[arc < 0 ? ~arc : arc].length < 2) {
+                arcs.push(arc);
+              }
+            });
+          });
+        });
+
+        // Stitch the arcs into one or more rings.
+        arcs = stitchArcs(topology, arcs);
+
+        // If more than one ring is returned,
+        // at most one of these rings can be the exterior;
+        // this exterior ring has the same winding order
+        // as any exterior ring in the original polygons.
+        if ((n = arcs.length) > 1) {
+          var sgn = exterior(polygons[0][0]);
+          for (var i = 0, t; i < n; ++i) {
+            if (sgn === exterior(arcs[i])) {
+              t = arcs[0], arcs[0] = arcs[i], arcs[i] = t;
+              break;
+            }
+          }
+        }
+
+        return arcs;
+      })
+    };
+  }
+
+  function featureOrCollection(topology, o) {
+    return o.type === "GeometryCollection" ? {
+      type: "FeatureCollection",
+      features: o.geometries.map(function(o) { return feature(topology, o); })
+    } : feature(topology, o);
+  }
+
+  function feature(topology, o) {
+    var f = {
+      type: "Feature",
+      id: o.id,
+      properties: o.properties || {},
+      geometry: object(topology, o)
+    };
+    if (o.id == null) delete f.id;
+    return f;
+  }
+
+  function object(topology, o) {
+    var absolute = transformAbsolute(topology.transform),
+        arcs = topology.arcs;
+
+    function arc(i, points) {
+      if (points.length) points.pop();
+      for (var a = arcs[i < 0 ? ~i : i], k = 0, n = a.length, p; k < n; ++k) {
+        points.push(p = a[k].slice());
+        absolute(p, k);
+      }
+      if (i < 0) reverse(points, n);
+    }
+
+    function point(p) {
+      p = p.slice();
+      absolute(p, 0);
+      return p;
+    }
+
+    function line(arcs) {
+      var points = [];
+      for (var i = 0, n = arcs.length; i < n; ++i) arc(arcs[i], points);
+      if (points.length < 2) points.push(points[0].slice());
+      return points;
+    }
+
+    function ring(arcs) {
+      var points = line(arcs);
+      while (points.length < 4) points.push(points[0].slice());
+      return points;
+    }
+
+    function polygon(arcs) {
+      return arcs.map(ring);
+    }
+
+    function geometry(o) {
+      var t = o.type;
+      return t === "GeometryCollection" ? {type: t, geometries: o.geometries.map(geometry)}
+          : t in geometryType ? {type: t, coordinates: geometryType[t](o)}
+          : null;
+    }
+
+    var geometryType = {
+      Point: function(o) { return point(o.coordinates); },
+      MultiPoint: function(o) { return o.coordinates.map(point); },
+      LineString: function(o) { return line(o.arcs); },
+      MultiLineString: function(o) { return o.arcs.map(line); },
+      Polygon: function(o) { return polygon(o.arcs); },
+      MultiPolygon: function(o) { return o.arcs.map(polygon); }
+    };
+
+    return geometry(o);
+  }
+
+  function reverse(array, n) {
+    var t, j = array.length, i = j - n; while (i < --j) t = array[i], array[i++] = array[j], array[j] = t;
+  }
+
+  function bisect(a, x) {
+    var lo = 0, hi = a.length;
+    while (lo < hi) {
+      var mid = lo + hi >>> 1;
+      if (a[mid] < x) lo = mid + 1;
+      else hi = mid;
+    }
+    return lo;
+  }
+
+  function neighbors(objects) {
+    var indexesByArc = {}, // arc index -> array of object indexes
+        neighbors = objects.map(function() { return []; });
+
+    function line(arcs, i) {
+      arcs.forEach(function(a) {
+        if (a < 0) a = ~a;
+        var o = indexesByArc[a];
+        if (o) o.push(i);
+        else indexesByArc[a] = [i];
+      });
+    }
+
+    function polygon(arcs, i) {
+      arcs.forEach(function(arc) { line(arc, i); });
+    }
+
+    function geometry(o, i) {
+      if (o.type === "GeometryCollection") o.geometries.forEach(function(o) { geometry(o, i); });
+      else if (o.type in geometryType) geometryType[o.type](o.arcs, i);
+    }
+
+    var geometryType = {
+      LineString: line,
+      MultiLineString: polygon,
+      Polygon: polygon,
+      MultiPolygon: function(arcs, i) { arcs.forEach(function(arc) { polygon(arc, i); }); }
+    };
+
+    objects.forEach(geometry);
+
+    for (var i in indexesByArc) {
+      for (var indexes = indexesByArc[i], m = indexes.length, j = 0; j < m; ++j) {
+        for (var k = j + 1; k < m; ++k) {
+          var ij = indexes[j], ik = indexes[k], n;
+          if ((n = neighbors[ij])[i = bisect(n, ik)] !== ik) n.splice(i, 0, ik);
+          if ((n = neighbors[ik])[i = bisect(n, ij)] !== ij) n.splice(i, 0, ij);
+        }
+      }
+    }
+
+    return neighbors;
+  }
+
+  function presimplify(topology, triangleArea) {
+    var absolute = transformAbsolute(topology.transform),
+        relative = transformRelative(topology.transform),
+        heap = minAreaHeap();
+
+    if (!triangleArea) triangleArea = cartesianTriangleArea;
+
+    topology.arcs.forEach(function(arc) {
+      var triangles = [],
+          maxArea = 0,
+          triangle;
+
+      // To store each point’s effective area, we create a new array rather than
+      // extending the passed-in point to workaround a Chrome/V8 bug (getting
+      // stuck in smi mode). For midpoints, the initial effective area of
+      // Infinity will be computed in the next step.
+      for (var i = 0, n = arc.length, p; i < n; ++i) {
+        p = arc[i];
+        absolute(arc[i] = [p[0], p[1], Infinity], i);
+      }
+
+      for (var i = 1, n = arc.length - 1; i < n; ++i) {
+        triangle = arc.slice(i - 1, i + 2);
+        triangle[1][2] = triangleArea(triangle);
+        triangles.push(triangle);
+        heap.push(triangle);
+      }
+
+      for (var i = 0, n = triangles.length; i < n; ++i) {
+        triangle = triangles[i];
+        triangle.previous = triangles[i - 1];
+        triangle.next = triangles[i + 1];
+      }
+
+      while (triangle = heap.pop()) {
+        var previous = triangle.previous,
+            next = triangle.next;
+
+        // If the area of the current point is less than that of the previous point
+        // to be eliminated, use the latter's area instead. This ensures that the
+        // current point cannot be eliminated without eliminating previously-
+        // eliminated points.
+        if (triangle[1][2] < maxArea) triangle[1][2] = maxArea;
+        else maxArea = triangle[1][2];
+
+        if (previous) {
+          previous.next = next;
+          previous[2] = triangle[2];
+          update(previous);
+        }
+
+        if (next) {
+          next.previous = previous;
+          next[0] = triangle[0];
+          update(next);
+        }
+      }
+
+      arc.forEach(relative);
+    });
+
+    function update(triangle) {
+      heap.remove(triangle);
+      triangle[1][2] = triangleArea(triangle);
+      heap.push(triangle);
+    }
+
+    return topology;
+  };
+
+  function cartesianRingArea(ring) {
+    var i = -1,
+        n = ring.length,
+        a,
+        b = ring[n - 1],
+        area = 0;
+
+    while (++i < n) {
+      a = b;
+      b = ring[i];
+      area += a[0] * b[1] - a[1] * b[0];
+    }
+
+    return area * .5;
+  }
+
+  function cartesianTriangleArea(triangle) {
+    var a = triangle[0], b = triangle[1], c = triangle[2];
+    return Math.abs((a[0] - c[0]) * (b[1] - a[1]) - (a[0] - b[0]) * (c[1] - a[1]));
+  }
+
+  function compareArea(a, b) {
+    return a[1][2] - b[1][2];
+  }
+
+  function minAreaHeap() {
+    var heap = {},
+        array = [],
+        size = 0;
+
+    heap.push = function(object) {
+      up(array[object._ = size] = object, size++);
+      return size;
+    };
+
+    heap.pop = function() {
+      if (size <= 0) return;
+      var removed = array[0], object;
+      if (--size > 0) object = array[size], down(array[object._ = 0] = object, 0);
+      return removed;
+    };
+
+    heap.remove = function(removed) {
+      var i = removed._, object;
+      if (array[i] !== removed) return; // invalid request
+      if (i !== --size) object = array[size], (compareArea(object, removed) < 0 ? up : down)(array[object._ = i] = object, i);
+      return i;
+    };
+
+    function up(object, i) {
+      while (i > 0) {
+        var j = ((i + 1) >> 1) - 1,
+            parent = array[j];
+        if (compareArea(object, parent) >= 0) break;
+        array[parent._ = i] = parent;
+        array[object._ = i = j] = object;
+      }
+    }
+
+    function down(object, i) {
+      while (true) {
+        var r = (i + 1) << 1,
+            l = r - 1,
+            j = i,
+            child = array[j];
+        if (l < size && compareArea(array[l], child) < 0) child = array[j = l];
+        if (r < size && compareArea(array[r], child) < 0) child = array[j = r];
+        if (j === i) break;
+        array[child._ = i] = child;
+        array[object._ = i = j] = object;
+      }
+    }
+
+    return heap;
+  }
+
+  function transformAbsolute(transform) {
+    if (!transform) return noop;
+    var x0,
+        y0,
+        kx = transform.scale[0],
+        ky = transform.scale[1],
+        dx = transform.translate[0],
+        dy = transform.translate[1];
+    return function(point, i) {
+      if (!i) x0 = y0 = 0;
+      point[0] = (x0 += point[0]) * kx + dx;
+      point[1] = (y0 += point[1]) * ky + dy;
+    };
+  }
+
+  function transformRelative(transform) {
+    if (!transform) return noop;
+    var x0,
+        y0,
+        kx = transform.scale[0],
+        ky = transform.scale[1],
+        dx = transform.translate[0],
+        dy = transform.translate[1];
+    return function(point, i) {
+      if (!i) x0 = y0 = 0;
+      var x1 = (point[0] - dx) / kx | 0,
+          y1 = (point[1] - dy) / ky | 0;
+      point[0] = x1 - x0;
+      point[1] = y1 - y0;
+      x0 = x1;
+      y0 = y1;
+    };
+  }
+
+  function noop() {}
+
+  if (typeof define === "function" && define.amd) define(topojson);
+  else if (typeof module === "object" && module.exports) module.exports = topojson;
+  else this.topojson = topojson;
+}();
+
+},{}],10:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors

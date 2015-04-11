@@ -8,10 +8,11 @@ var Transform = require('stream').Transform;
 
 
 var Objectify = function(options) {
-  if (!options || !options.indexColumn) {
-    this.throwError_('You must specify an indexColumn');
-  }
+  // To group objects based on a column pass an indexColumn
   this.indexColumn = options.indexColumn;
+  // If you only have a single element per index, you can pass the 'unwrap'
+  // option which will turn single-elemnt array into an object.
+  this.unwrap = options.unwrap && !!options.indexColumn;
 
   Transform.call(this, options);
 };
@@ -28,21 +29,37 @@ Objectify.prototype._transform = function(file, encoding, done) {
   else if (file.isBuffer()) {
     var data = JSON.parse(file.contents);
     var header = data[0];
-    if (header.indexOf(this.indexColumn) === -1) {
+    if (this.indexColumn && header.indexOf(this.indexColumn) === -1) {
       this.throwError_('Index column does not exist');
     }
 
-    var groupedData = {};
+    var groupedData = this.indexColumn ? {} : [];
     _.each(data, function(row, index) {
       if (index === 0) {
         return;
       }
 
       var obj = _.object(header, row);
-      var group = obj[this.indexColumn];
-      groupedData[group] = groupedData[group] || [];
-      groupedData[group].push(obj);
+
+      if (this.indexColumn) {
+        var group = obj[this.indexColumn];
+        groupedData[group] = groupedData[group] || [];
+        groupedData[group].push(obj);
+      } else {
+        groupedData.push(obj);
+      }
+
     }, this);
+
+    if (this.unwrap) {
+      _.each(groupedData, function(value, key) {
+        if (value.length !== 1) {
+          this.throwError_('You passed the unwrap option but the ' + key + ' index has ' + value.length + ' values. Must be exactly 1.');
+        }
+
+        groupedData[key] = _.first(value);
+      }, this);
+    }
 
     file.contents = new Buffer(JSON.stringify(groupedData));
     this.push(file);
@@ -60,6 +77,7 @@ Objectify.prototype.throwError_ = function(message) {
 
 
 var factory = function(options) {
+  options = options || {};
   return new Objectify(_.extend(options, { objectMode: true }));
 };
 

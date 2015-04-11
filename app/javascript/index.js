@@ -1,4 +1,14 @@
-var _ = require('underscore');
-var d3 = require('d3');
+_ = require('underscore');
+d3 = require('d3');
 
-console.log('js loaded');
+// var TotalsMap = require('./views/totalsmap');
+// var map = new TotalsMap({
+//   el: '#map',
+//   url: '/data/totalsmap.json'
+// });
+
+var PrisonPops = require('./views/prisonpops');
+new PrisonPops({
+  el: '#small-multiples',
+  url: '/data/gq-races.json'
+})

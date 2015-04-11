@@ -3,8 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {},
+  "browserify": {
+    "transform": [
+      "jadeify"
+    ]
+  },
   "dependencies": {},
   "devDependencies": {
+    "async": "^0.9.0",
     "browserify": "^9.0.7",
     "csv": "^0.4.1",
     "d3": "^3.5.5",
@@ -12,9 +18,13 @@
     "gulp-compass": "^2.0.4",
     "gulp-jade": "^1.0.0",
     "gulp-jshint": "^1.10.0",
+    "gulp-notify": "^2.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.4",
+    "jade": "^1.9.2",
+    "jadeify": "^4.1.0",
     "merge2": "^0.3.2",
+    "topojson": "^1.6.18",
     "underscore": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.1.0"
