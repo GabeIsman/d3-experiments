@@ -583,6 +583,9 @@ PrisonPops.prototype.renderData = function() {
             var currentRotation   = d.currentRotation || 0; // Radians
             var currentStartAngle = currentRotation + selectedArc.startAngle;
             d.currentRotation     = currentRotation - currentStartAngle;
+            if (d.currentRotation < 0) {
+              d.currentRotation = Math.PI * 2 + d.currentRotation;
+            }
             var rotationDegrees   = 360 * d.currentRotation / (Math.PI * 2);
 
             return 'rotate(' + rotationDegrees + ')';
